@@ -17,12 +17,12 @@ class ServerForm(Form):
                                    validators.Length(min=-1,
                                                      max=GameServer.display_name.type.length)])
 
-    ip_string = StringField('Server IP',
+    ip_string = StringField('Server IP/Hostname',
                             validators=[
                                 validators.required(),
-                                validators.IPAddress()])
+                                validators.Length(max=32)])
 
-    port = IntegerField('Server port', default=27015,
+    port = IntegerField('Server port', default='',
                         validators=[validators.required()])
 
     rcon_password = StringField('RCON password',
