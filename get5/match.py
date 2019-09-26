@@ -76,7 +76,7 @@ class MatchForm(Form):
                              ])
     side_type = RadioField('Side type',
                            validators=[validators.required()],
-                           default='standard',
+                           default='never_knife',
                            choices=[
                                ('standard', 'Standard: Team that doesn\'t pick map gets side choice'),
                                ('never_knife',
