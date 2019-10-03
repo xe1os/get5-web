@@ -116,7 +116,7 @@ class TeamForm(FlaskForm):
         validators.Length(min=-1, max=Team.name.type.length)])
 
     tag = StringField('Team Tag', validators=[
-        validators.required(), validators.Length(min=-1, max=Team.tag.type.length)])
+        validators.optional(), validators.Length(min=-1, max=Team.tag.type.length)])
 
     flag_choices = [('', 'None')] + countries.country_choices
     country_flag = SelectField(
