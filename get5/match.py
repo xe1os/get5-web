@@ -117,7 +117,7 @@ class MatchForm(Form):
                             ])
 
     season_selection = SelectField('Season', coerce=int,
-                                   validators=[validators.optional()])
+                                   validators=[validators.required()])
 
     team1_series_score = IntegerField('Team 1 Series Score',
                                       default=0,
