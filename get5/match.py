@@ -65,7 +65,7 @@ class MatchForm(Form):
 
     series_type = RadioField('Series type',
                              validators=[validators.required()],
-                             default='bo1',
+                             default='bo1-preset',
                              choices=[
                                  ('bo1-preset', 'Bo1 with preset map'),
                                  ('bo1', 'Bo1 with map vetoes'),
