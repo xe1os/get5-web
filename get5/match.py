@@ -320,6 +320,7 @@ def match_forfeit(matchid, teamwinner):
     match.end_time = datetime.now()
     match.forfeit = 1
     map_stats.end_time = datetime.now()
+    map_stats.winner = winnerId
     server = GameServer.query.get(match.server_id)
     if server:
         server.in_use = False
@@ -695,16 +696,21 @@ def check_private_or_public(user, match, team1, team2):
         if not user:
             raise BadRequestError("Please login before viewing this match.")
         # Get team lists, and check if logged in user is part of match.
-        if not (user.id == match.user_id) or (config_setting(
+        if (user.id == match.user_id) or (config_setting(
                 'ADMINS_ACCESS_ALL_MATCHES') and util.is_admin(user)) or util.is_super_admin(user):
             isPlayer = False
-            playerstats_steam = PlayerStats.query(PlayerStats.steam_id).filter_by(
-            match_id=match.id)
-            playerList = list(set(team1.auths + team2.auths + playerstats_steam))
-            for player in playerList:
-                if user.steam_id == player:
-                    isPlayer = True
-                    break
+            playerstats_steam = [r.steam_id for r in PlayerStats.query.filter(
+                PlayerStats.match_id == match.id)]
+            playerList = list(
+                set(team1.auths + team2.auths + playerstats_steam))
+            app.logger.info("Our list: {}".format(playerList))
+            if (config_setting('ADMINS_ACCESS_ALL_MATCHES') and util.is_admin(user)) or util.is_super_admin(user):
+                isPlayer = True
+            else:
+                for player in playerList:
+                    if user.steam_id == player:
+                        isPlayer = True
+                        break
             if not isPlayer:
                 raise BadRequestError(
                     "You cannot view this match as you were not a part of it!")
